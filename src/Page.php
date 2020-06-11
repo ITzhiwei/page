@@ -53,14 +53,15 @@
          * @param int $totle 信息总行数 count()
          * @param int $onePageDisplayNum 每页显示条数
          * @param int $showNumList 是否显示中间的 1 ... 4 5 6 ... 99； 0不显示，必须大于2，填写多少则显示多少个页码按钮，单数
-         * @param bool $showNumListType 决定 $showNumList 的模式，true时，会在 $showNumList 后面显示...尾页按钮，默认不显示
+         * @param bool $showNumListType 决定 $showNumList 的模式，true时，会在 $showNumList 后面显示...尾页按钮，默认显示
          * @param bool $showText 是否显示行数页数等文字信息，默认不显示
+         * @param bool $showPrevNext 是否显示 上一页、下一页 俩个按钮，默认显示
          * @param bool $showHome 是否显示 首页、尾页 俩个按钮，默认显示
          * @param bool $showSelect 是否显示下拉选择页码，默认不显示
          * @param string $url 自定义跳转URL，如： /users.php?page=     /users/page/   方法会在自定义的URL后面追加页码数，所以不要在后面带上page参数
          * @return string 若只有一页，则返回空字符串
          */
-        public function getPageHtml($totle, $onePageDisplayNum = 10, $showNumList = 7, $showNumListType = true, $showText = false, $showPrevNext = true, $showSelect = false, $url = null){
+        public function getPageHtml($totle, $onePageDisplayNum = 10, $showNumList = 7, $showNumListType = true, $showText = false, $showPrevNext = true , $showHome = true, $showSelect = false, $url = null){
             $this->url = $url;
 
             $pageType = $this->pageType;
@@ -89,11 +90,13 @@
                         "/$totle 记录</span>";
                         //"/$totle 记录</span><span class='disabled'>$nowPage/$allPageNum 页</span>";
                 };
-                if ($nowPage > 1) {
-                    $pageHtml .= "<a href='{$url}1'>首页</a>";
-                } else {
-                    $pageHtml .= '<span class="disabled">首页</span>';
-                }
+                if($showHome) {
+                    if ($nowPage > 1) {
+                        $pageHtml .= "<a href='{$url}1'>首页</a>";
+                    } else {
+                        $pageHtml .= '<span class="disabled">首页</span>';
+                    }
+                };
                 //判断是否显示 上一页、下一页 按钮
                 if($showPrevNext) {
                     if ($nowPage > 1) {
@@ -152,10 +155,12 @@
                     }
                 };
                 //默认显示首页、尾页按钮
-                if ($nextPage <= $allPageNum) {
-                    $pageHtml .= "<a href=\"{$url}$allPageNum\">尾页</a>";
-                } else {
-                    $pageHtml .= '<span class="disabled">尾页</span>';
+                if($showHome) {
+                    if ($nextPage <= $allPageNum) {
+                        $pageHtml .= "<a href=\"{$url}$allPageNum\">尾页</a>";
+                    } else {
+                        $pageHtml .= '<span class="disabled">尾页</span>';
+                    }
                 }
                 //判断是否显示下拉列表
                 if($showSelect){
