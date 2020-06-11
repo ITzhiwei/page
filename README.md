@@ -63,6 +63,11 @@ $param1 是否开启自动补全路由信息，仅在 pathInfo 模式下有效�
 
 $param2 如果是 swoole 启动的服务，需要传入 $request->server['request_uri'] ，不是swoole直接忽略
 ```
+* $pageClass->urlType
+```
+设置URL的类型，默认是0，是 pathInfo 模式，即 .../page/X
+设置为1为普通模式，page是$_GET获取，即 ?page=X 或 &page=X
+```
 * $pageClass->pageType
 ```
 默认 flickr
