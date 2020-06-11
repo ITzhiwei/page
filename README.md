@@ -34,7 +34,7 @@ $pageClass->hoverBgColor = '#00a0e9';
 $pageClass->hoverFontColor = '#fff';
 //当前页码的字体颜色
 $pageClass->nowPageFontColor = '#ff0084';
-$totle = 100;
+$totle = 100; 
 //第2个参数是每页显示多少条数据，第3个参数是显示多少个分页按钮，第4个参数是显示...和最后一个页码
 $pageHtml = $pageClass->getPageHtml($totle, 10, 7, true);
 ```
