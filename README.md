@@ -3,7 +3,8 @@
 简单灵活好用，多个样式可选，支持普通的[?|&]page=1 和 pathInfo /page/1 等模式  
 点击跳转分页时不会漏掉其他url原有的参数  
 ![Image](http://oss.wybmxc.com/demo0.png)  
-![Image](http://oss.wybmxc.com/demo1.png)  
+![Image](http://oss.wybmxc.com/demo1.png) 
+![Image](http://oss.wybmxc.com/demo6.png)   
 ![Image](http://oss.wybmxc.com/demo2.png)  
 ![Image](http://oss.wybmxc.com/demo3.png)  
 ![Image](http://oss.wybmxc.com/demo4.png)  
