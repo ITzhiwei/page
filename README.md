@@ -2,13 +2,13 @@
 ## 介绍
 简单灵活好用，多个样式可选，支持普通的[?|&]page=1 和 pathInfo /page/1 等模式  
 点击跳转分页时不会漏掉其他url原有的参数  
-![Image](http://oss.wybmxc.com/demo0.png)  
-![Image](http://oss.wybmxc.com/demo1.png) 
-![Image](http://oss.wybmxc.com/demo6.png)   
-![Image](http://oss.wybmxc.com/demo2.png)  
-![Image](http://oss.wybmxc.com/demo3.png)  
-![Image](http://oss.wybmxc.com/demo4.png)  
-![Image](http://oss.wybmxc.com/demo5.png)  
+![Image](http://www.wybmxc.com/images/demo0.png)  
+![Image](http://www.wybmxc.com/images/demo1.png) 
+![Image](http://www.wybmxc.com/images/demo6.png)   
+![Image](http://www.wybmxc.com/images/demo2.png)  
+![Image](http://www.wybmxc.com/images/demo3.png)  
+![Image](http://www.wybmxc.com/images/demo4.png)  
+![Image](http://www.wybmxc.com/images/demo5.png)  
 ## 安装
 ```
 1、使用 composer 命令安装：composer require lipowei/page
@@ -39,7 +39,7 @@ $totle = 100;
 //第2个参数是每页显示多少条数据，第3个参数是显示多少个分页按钮，第4个参数是显示...和最后一个页码
 $pageHtml = $pageClass->getPageHtml($totle, 10, 7, true);
 ```
-![Image](http://oss.wybmxc.com/demo0.png)
+![Image](http://www.wybmxc.com/images/demo0.png)
 ```
 例子2 $pageClass->getPageHtml 比例子一多了第5个参数
 $pageClass = new Page();
@@ -47,14 +47,14 @@ $pageClass->pageType = 'flickr';
 //第5个参数是显示 1-10/100 记录 的信息
 $pageHtml = $pageClass->getPageHtml($totle, 10, 7, true, true);
 ```
-![Image](http://oss.wybmxc.com/demo1.png)
+![Image](http://www.wybmxc.com/images/demo1.png)
 ```
 例子3 样式选用了 blackRed  ；可选用样式：flickr、blackRed、youtube、viciao
 $pageClass = new Page();
 $pageClass->pageType = 'blackRed';
 $pageHtml = $pageClass->getPageHtml($totle, 10, 7, false);
 ```
-![Image](http://oss.wybmxc.com/demo5.png)
+![Image](http://www.wybmxc.com/images/demo5.png)
 ## 参数介绍
 * new Page($param1,$param2);
 ```
