@@ -2,7 +2,7 @@
 ## 介绍
 简单灵活好用，多个样式可选，支持普通的[?|&]page=1 和 pathInfo /page/1 等模式  
 点击跳转分页时不会漏掉其他url原有的参数  
-下面的图片是效果，如果图片不能显示，则是你的网络DNS没有 raw.githubusercontent.com 的解析  
+下面的图片是效果，如果图片不能显示，则是你的网络DNS不通 raw.githubusercontent.com ，可解析IP:151.101.76.133  
 ![add Image](https://github.com/ITzhiwei/page/raw/master/src/demo0.png)  
 ![add Image](https://github.com/ITzhiwei/page/raw/master/src/demo6.png)   
 ![add Image](https://github.com/ITzhiwei/page/raw/master/src/demo2.png)  
