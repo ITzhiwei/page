@@ -15,7 +15,7 @@
 ```
 ## 使用
 ```
-//可打开demo目录下查看不同模式的使用示例
+//可打开demo目录下查看不同模式的使用示例 如果使用ajax模式，最好先看下demo-ajax
 require_once 'vendor/autoload.php'; //这个是composer模式，如果不是composer则无需这行代码
 use lipowei\smallTools\Page;
 $pageClass = new Page();
@@ -42,12 +42,17 @@ $totle = 100;
 $pageHtml = $pageClass->getPageHtml($totle, 10, 7, true);
 ```
 ```
-例子2 ajax 模式：
+例子2 ajax 模式：请到 demo-ajax 中查看完整示例
 include "../vendor/autoload.php";
 use lipowei\smallTools\Page;
 $pageClass = new Page();
 //开启 ajax 模式
 $pageClass->isAajx = true;
+//前端进行ajax分页请求数据的函数名，需要前端定义该函数； 要在 ajax 的回调内执行 pageAjaxLock = true; 进行解锁，解锁后才能进行下一次ajax分页触发，这是防止用户多次重复点击
+$pageClass->ajaxFunctionName = 'getList()';
+//假设有100列数据
+$totle = 100;
+$pageHtml = $pageClass->getPageHtml($totle);
 ```  
 
 ## 参数介绍
