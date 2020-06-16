@@ -1,0 +1,43 @@
+[
+    {
+        "name": "lipowei/page",
+        "version": "v1.2",
+        "version_normalized": "1.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ITzhiwei/page.git",
+            "reference": "7b1e0c07eff1743dcf49f1944e27c8faf80cdcf1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ITzhiwei/page/zipball/7b1e0c07eff1743dcf49f1944e27c8faf80cdcf1",
+            "reference": "7b1e0c07eff1743dcf49f1944e27c8faf80cdcf1",
+            "shasum": "",
+            "mirrors": [
+                {
+                    "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                    "preferred": true
+                }
+            ]
+        },
+        "time": "2020-06-11T15:15:54+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "lipowei\\smallTools\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "zhiwei",
+                "email": "2394599321@qq.com"
+            }
+        ],
+        "description": "分页；简单+灵活，生成分页html，支持 [?|&]page=1 等普通GET模式，也支持 pathInfo 模式 /page/1"
+    }
+]

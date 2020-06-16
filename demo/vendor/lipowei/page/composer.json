@@ -1,0 +1,40 @@
+{
+    "name": "lipowei/page",
+    "description": "分页；简单+灵活，生成分页html，支持 [?|&]page=1 等普通GET模式，也支持 pathInfo 模式 /page/1",
+    "type": "library",
+    "license": "MIT",
+    "version": "v1.2",
+    "autoload": {
+      "psr-4": {
+        "lipowei\\smallTools\\": "src/"
+      }
+    },
+    "authors": [
+        {
+            "name": "zhiwei",
+            "email": "2394599321@qq.com"
+        }
+    ],
+    "require": {
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
