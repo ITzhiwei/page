@@ -1,13 +1,15 @@
 <?php
+// +----------------------------------------------------------------------
+// | https://github.com/ITzhiwei
+// +----------------------------------------------------------------------
+// | Author: lipowei <2394599321@qq.com>
+// +----------------------------------------------------------------------
 namespace lipowei\smallTools;
 class Page{
-
     /**
      * @var url的模式，0：pathInfo模式，如：page/2    1：普通模式，如：page=2  默认pathInfo模式
      */
-    public $urlType = 0;
-    private $url = null;
-
+    public $urlType = 1;
     /**
      * @var 样式，可选：flickr、blackRed、youtube、viciao
      */
@@ -28,25 +30,34 @@ class Page{
      * @var 导航位置，如：left、center、right；可不设置，使用默认位置
      */
     public $pageAlign = null;
-
-    private $autoAddUrlInfo = null;
-    private $requestUri = null;
     /**
-     * Page constructor.
-     * @param bool $autoAddUrlInfo PATHINFO模式下是否自动补全路由参数，默认补全； 补全：如 www.xxx.com/admin 会自动补全成 www.xxx.com/admin/index/index  不足3个路由参数的后面自动补全3个路由参数，如果要识别补全的数量不是3，传入其他数字即可
-     * @param null $requestUri 如果是swoole生成的服务，需要传入 $request->server['request_uri']，非swoole则无需理会该参数
+     * @var PATHINFO模式下是否自动补全路由参数，默认补全；如：www.xxx.com/admin 会自动补全成 www.xxx.com/admin/index/index  不足3个路由参数的后面自动补全3个路由参数，如果要识别补全的数量不是3，传入其他数字即可
      */
-    public function __construct($autoAddUrlInfo = 3, $requestUri = null){
-        if($autoAddUrlInfo){
-            $this->autoAddUrlInfo = $autoAddUrlInfo;
-        }else{
-            $this->autoAddUrlInfo = false;
-        }
-        if($requestUri !== null){
-            $this->requestUri = $requestUri;
-        };
-    }
+    public $autoAddUrlInfo = 3;
+    /**
+     * @var 如果是swoole生成的服务，需要传入$request->server['request_uri']，非swoole则无需理会该参数
+     */
+    public $requestUri = null;
 
+    /**
+     * @var bool，是否使用ajax模式
+     */
+    public $isAajx = false;
+    /**
+     * @var string，当使用ajax模式时，
+     */
+    public $ajaxFunctionName = 'lipoweiPageAjaxFuc';
+
+    private $url = null;
+    private $totle = null;
+    private $allPageNum = null;
+    private $showText = null;
+    private $onePageDisplayNum = null;
+    private $showHome = null;
+    private $showPrevNext = null;
+    private $showNumList = null;
+    private $showNumListType = null;
+    private $showSelect = null;
 
     /**
      * 假设有99页，下面的参数说明：
@@ -62,13 +73,25 @@ class Page{
      * @return string 若只有一页，则返回空字符串
      */
     public function getPageHtml($totle, $onePageDisplayNum = 10, $showNumList = 7, $showNumListType = true, $showText = false, $showPrevNext = true , $showHome = true, $showSelect = false, $url = null){
+
         $this->url = $url;
+        $this->showText = $showText;
+        $this->onePageDisplayNum = $onePageDisplayNum;
+        $this->totle = $totle;
+        $this->showHome = $showHome;
+        $this->showPrevNext = $showPrevNext;
+        $this->showNumList = $showNumList;
+        $this->showNumListType = $showNumListType;
+        $this->showSelect = $showSelect;
+
+        $isAjax = $this->isAajx;
 
         $pageType = $this->pageType;
-        $pageHtml = $this->styleSelect($pageType);
 
         if($url == null) {
-            $url = $this->getUrl();
+            if(!$isAjax) {
+                $url = $this->getUrl();
+            }
         }
         //获取当前页码
         $nowPage = $this->getNowPage();
@@ -78,7 +101,9 @@ class Page{
         $nextPage = $nowPage + 1;
         //计算总页码数
         $allPageNum = ceil($totle/$onePageDisplayNum);
+        $this->allPageNum = $allPageNum;
         if($allPageNum > 1) {
+            $pageHtml = $this->styleSelect($pageType);
             //当前页码
             $nowPage = min($allPageNum, $nowPage);
             //查看是否显示，行数页数等文字信息
@@ -92,7 +117,11 @@ class Page{
             };
             if($showHome) {
                 if ($nowPage > 1) {
-                    $pageHtml .= "<a href='{$url}1'>首页</a>";
+                    if($isAjax) {
+                        $pageHtml .= $this->ajaxAhtml(1, '首页');
+                    }else{
+                        $pageHtml .= "<a href='{$url}1'>首页</a>";
+                    }
                 } else {
                     $pageHtml .= '<span class="disabled">首页</span>';
                 }
@@ -100,7 +129,11 @@ class Page{
             //判断是否显示 上一页、下一页 按钮
             if($showPrevNext) {
                 if ($nowPage > 1) {
-                    $pageHtml .= "<a href='$url{$prevPage}'>上一页</a>";
+                    if($isAjax) {
+                        $pageHtml .= $this->ajaxAhtml($prevPage, '上一页');
+                    }else {
+                        $pageHtml .= "<a href='$url{$prevPage}'>上一页</a>";
+                    }
                 } else {
                     $pageHtml .= '<span class="disabled">上一页</span>';
                 }
@@ -112,7 +145,8 @@ class Page{
                 $showNumList = $showNumList<3?3:$showNumList;
                 //强制为单数
                 $showNumList = $showNumList%2?$showNumList:$showNumList+1;
-
+                //二次保存 $showNumList
+                $this->showNumList = $showNumList;
                 //计算俩侧页码按钮数
                 $leftRgihtButton = ($showNumList - 1)/2;
                 //根据当前页码数计算起始页码数
@@ -124,7 +158,11 @@ class Page{
                     if($forStartPage == $nowPage){
                         $pageHtml .= '<span class="current">'.$forStartPage.'</span>';
                     }else{
-                        $pageHtml .= '<a href="'.$url.$forStartPage.'">'.$forStartPage.'</a>';
+                        if($isAjax) {
+                            $pageHtml .= $this->ajaxAhtml($forStartPage, $forStartPage);
+                        }else {
+                            $pageHtml .= '<a href="' . $url . $forStartPage . '">' . $forStartPage . '</a>';
+                        }
                     }
                     $forStartPage++;
                     //若已经没有更多页数，直接退出拼接
@@ -137,10 +175,18 @@ class Page{
                     if ($forStartPage < $allPageNum) {
                         if ($forStartPage + 1 < $allPageNum) {
                             //带有...
-                            $pageHtml .= '...<a href="' . $url . $allPageNum . '">' . $allPageNum . '</a>';
+                            if($isAjax) {
+                                $pageHtml .= "...".$this->ajaxAhtml($allPageNum, $allPageNum);;
+                            }else {
+                                $pageHtml .= '...<a href="' . $url . $allPageNum . '">' . $allPageNum . '</a>';
+                            }
                         } else {
-                            //直接最近最后页码的按钮
-                            $pageHtml .= '<a href="' . $url . $allPageNum . '">' . $allPageNum . '</a>';
+                            //因为中间没有间隔，直接最后显示页码的按钮
+                            if($isAjax) {
+                                $pageHtml .= $this->ajaxAhtml($allPageNum, $allPageNum);
+                            }else {
+                                $pageHtml .= '<a href="' . $url . $allPageNum . '">' . $allPageNum . '</a>';
+                            }
                         }
                     };
                 }
@@ -149,7 +195,11 @@ class Page{
             //判断是否显示上一页下一页
             if($showPrevNext) {
                 if ($nextPage <= $allPageNum) {
-                    $pageHtml .= "<a href=\"$url{$nextPage}\">下一页</a>";
+                    if($isAjax) {
+                        $pageHtml .= $this->ajaxAhtml($nextPage, '下一页');
+                    }else {
+                        $pageHtml .= "<a href=\"$url{$nextPage}\">下一页</a>";
+                    }
                 } else {
                     $pageHtml .= '<span class="disabled">下一页</span>';
                 }
@@ -157,14 +207,23 @@ class Page{
             //默认显示首页、尾页按钮
             if($showHome) {
                 if ($nextPage <= $allPageNum) {
-                    $pageHtml .= "<a href=\"{$url}$allPageNum\">尾页</a>";
+                    if($isAjax) {
+                        $pageHtml .= $this->ajaxAhtml($allPageNum, '尾页');
+                    }else {
+                        $pageHtml .= "<a href=\"{$url}$allPageNum\">尾页</a>";
+                    }
                 } else {
                     $pageHtml .= '<span class="disabled">尾页</span>';
                 }
             }
             //判断是否显示下拉列表
             if($showSelect){
-                $pageHtml .= '<span class="weiSelect">跳至 <select name="topage" onchange="window.location=\''.$url.'\' + this.value" >\n';
+                if($isAjax){
+                    $pageHtml .= '<span class="weiSelect">跳至 <select name="topage" onchange="lipoweiPageAjaxStart(this.value)" >\n';
+                }else{
+                    $pageHtml .= '<span class="weiSelect">跳至 <select name="topage" onchange="window.location=\''.$url.'\' + this.value" >\n';
+                }
+
                 for($i=1; $i<=$allPageNum; $i++){
                     if($i == $nowPage){
                         $pageHtml .= "<option value=\"$i\" selected>$i</option>\n";
@@ -174,13 +233,15 @@ class Page{
                 }
                 $pageHtml .= "</select> 页</span>";
             }
-            $pageHtml .= '</div></div>';
+            $pageHtml .= '</div>';
             return $pageHtml;
 
         }else{
             return '';
         }
     }
+
+
 
     /**
      * 获取url
@@ -280,6 +341,7 @@ class Page{
      */
     private function styleSelect($type){
         $pageHtml = '';
+        $isAjax = $this->isAajx;
         switch ($type){
             case 'flickr':
                 $nowPageFontColor = $this->nowPageFontColor ?: '#ff0084';
@@ -348,12 +410,167 @@ class Page{
                         ';
                 break;
         }
-        $pageHtml .= '
-                        <div class="lipoweiPageMain" style="user-select:none;"><div class="'.$type.'">
-                        ';
+        $pageHtml .= '<div class="'.$type.'" id="lipoweiPageMain" style="user-select:none;">';
+        if($isAjax){
+            $pageHtml .= $this->ajaxScript();
+            var_dump($this->ajaxScript());
+        }
         return $pageHtml;
 
     }
 
+    /**
+     * 合成ajax模式下的a标签
+     * @param $pageNum
+     * @param $font
+     * @return string
+     */
+    private function ajaxAhtml($pageNum, $font){
+        return "<a onclick='lipoweiPageAjaxStart($pageNum)'>$font</a>";
+    }
+
+    /**
+     * ajax模式下的js代码
+     * @return string
+     */
+    private function ajaxScript(){
+
+        $ajaxFcuntionName = $this->ajaxFunctionName;
+        if(substr($ajaxFcuntionName, -1) != ')'){
+            $ajaxFcuntionName2 = $ajaxFcuntionName;
+            $ajaxFcuntionName .= '()';
+        }else{
+            //获取 ) 的位置
+            $strPosition = stripos($ajaxFcuntionName, '(');
+            $ajaxFcuntionName2 = substr($strPosition, 0, $strPosition);
+        }
+        $js = '
+            <script>
+                var pageNum = 0;
+                var pageAjaxLock = true;
+                function lipoweiPageAjaxStart(pageParam){
+                    if(pageAjaxLock){
+                        pageAjaxLock = false;
+                        pageNum = pageParam;
+                        if(typeof '.$ajaxFcuntionName2.' != \'undefined\'){
+                        ' . $ajaxFcuntionName . ';
+                        var pageHtml = compositePageHtml(pageNum);
+                        document.getElementById(\'lipoweiPageMain\').innerHTML = pageHtml;
+                        }else{
+                            alert(\''.$ajaxFcuntionName2.'不存在，请定义 '.$ajaxFcuntionName2.' 函数，它的作用是进行 ajax 请求获取后端数据；\\r\\n注意：\\r\\n1)全局 pageNum 参数是页码，需要传给后端;\\r\\n2)需要在 ajax 回调中写 pageAjaxLock = true;\')
+                        }
+                    }else{
+                        console.log("当前全局 pageAjaxLock 为false，不执行ajax请求；请在 ajax 回调内将 pageAjaxLock 设置为 true");
+                    }
+                }
+                
+                function compositePageHtml(pageParam){
+                    var lipoweiPageHtml = "";
+                    var prevPage = pageParam - 1;
+                    var nextPage = pageParam + 1;
+                    var allPageNum = '.$this->allPageNum.';
+                    var totle = '.$this->totle.';
+                    //查看是否显示文章信息
+                    var showText = '.(($this->showText)?'true':'false').';
+                    //查看是否显示首页尾页按钮
+                    var showHome = '.(($this->showHome)?'true':'false').';
+                    var onePageDisplayNum = '.$this->onePageDisplayNum.';
+                    var showPrevNext = '.(($this->showPrevNext)?'true':'false').';
+                    var showNumList = '.$this->showNumList.';
+                    var showNumListType = '.(($this->showNumListType)?'true':'false').';
+                    var showSelect = '.(($this->showSelect)?'true':'false').';
+                    
+                    if(showText){
+                        var limitPageStart = (pageParam - 1) * onePageDisplayNum;
+                        var endDisplayNum;
+                        if(limitPageStart + onePageDisplayNum > totle ){ 
+                            endDisplayNum = totle;
+                        }else{ 
+                            endDisplayNum = limitPageStart + onePageDisplayNum;
+                        }
+                        lipoweiPageHtml += \'<span class="disabled">\' + limitPageStart + \'-\' + endDisplayNum + \'/\' + totle + \'记录</span>\';
+                    };
+                    if(showHome){
+                        if(pageParam > 1){
+                            lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart(1)\'>首页</a>";
+                        }else{
+                            lipoweiPageHtml += "<span class=\'disabled\'>首页</span>";
+                        }
+                    };
+                    if(showPrevNext){
+                        if(pageParam > 1){
+                            lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+prevPage+")\'>上一页</a>";
+                        }else{
+                            lipoweiPageHtml += "<span class=\'disabled\'>上一页</span>";
+                        }
+                    };
+                    if(showNumList){
+                        //计算俩侧页码按钮数
+                        var leftRgihtButton = (showNumList - 1)/2;
+                        //根据当前页码数计算起始页码数
+                        var startPage = pageParam - leftRgihtButton;
+                        startPage = startPage>allPageNum-showNumList?allPageNum-showNumList+1:startPage;
+                        startPage = startPage>0?startPage:1;
+                        var forStartPage = startPage;
+                        for(var i=0;i<showNumList;i++){
+                            if(forStartPage == pageParam){
+                                lipoweiPageHtml += "<span class=\'current\'>"+ forStartPage +"</span>";
+                            }else{
+                                lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+forStartPage+")\'>"+forStartPage+"</a>";
+                            }
+                            forStartPage++;
+                            //若已经没有更多页数，直接退出拼接
+                            if(forStartPage > allPageNum){
+                                break;
+                            }
+                        }
+                        if(showNumListType){
+                            forStartPage--;
+                            if (forStartPage < allPageNum) {
+                                if (forStartPage + 1 < allPageNum) {
+                                    lipoweiPageHtml += "..." + "<a onclick=\'lipoweiPageAjaxStart("+allPageNum+")\'>"+allPageNum+"</a>";
+                                }else{
+                                    lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+allPageNum+")\'>"+allPageNum+"</a>";
+                                }
+                            }
+                        }
+                    };
+                    
+                    if(showPrevNext) {
+                         if (nextPage <= allPageNum) {
+                             lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+nextPage+")\'>下一页</a>";
+                         }else{
+                             lipoweiPageHtml += "<span class=\'disabled\'>下一页</span>";
+                         }
+                    };
+                    
+                    if(showHome){
+                        if (nextPage <= allPageNum) {
+                            lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+allPageNum+")\'>尾页</a>";
+                        }else{
+                            lipoweiPageHtml += "<span class=\'disabled\'>尾页</span>";
+                        }
+                    };
+                    
+                    if(showSelect){
+                        lipoweiPageHtml += "<span class=\'weiSelect\'>跳至 <select name=\'topage\' onchange=\'lipoweiPageAjaxStart("+this.value+")\' >";
+                        for(var i=1; i<=allPageNum; i++){
+                            if(i == pageParam){
+                                lipoweiPageHtml += "<option value=\'"+i+"\' selected>"+i+"</option>";
+                            }else{
+                                lipoweiPageHtml += "<option value=\'"+i+"\'>"+i+"</option>";
+                            }
+                        }
+                        lipoweiPageHtml += "</select> 页</span>";
+                    }
+                    
+                    lipoweiPageHtml += "</div>";
+                    return lipoweiPageHtml;
+                }
+            </script>';
+        return $js;
+    }
 
 }
+?>
+
