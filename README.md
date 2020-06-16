@@ -1,6 +1,6 @@
 # PHP 分页
 ## 介绍
-简单灵活好用，多个样式可选，支持普通的[?|&]page=1 和 pathInfo /page/1 等模式  
+简单灵活好用，多个样式可选，支持 ajax 模式 和 普通的[?|&]page=1 和 pathInfo /page/1 等模式  
 点击跳转分页时不会漏掉其他url原有的参数  
 下面的图片是效果，如果图片不能显示，则是你的网络DNS不通 raw.githubusercontent.com ，可解析IP:151.101.76.133  
 ![add Image](https://github.com/ITzhiwei/page/raw/master/src/demo0.png)  
@@ -15,16 +15,19 @@
 ```
 ## 使用
 ```
+//可打开demo目录下查看不同模式的使用示例
 require_once 'vendor/autoload.php'; //这个是composer模式，如果不是composer则无需这行代码
 use lipowei\smallTools\Page;
-$pageClass = new Page();  
+$pageClass = new Page();
+//0 pathInfo 模式， 1是get模式  
+$pageClass->urlType = 0;
 $totle = 100;//总条数
 $pageHtml = $pageClass->getPageHtml($totle);//这个pageHtml直接输出到html就可以显示分页
 ```
 ```
-例子1：
+例子1 pathInfo模式：
 $pageClass = new Page();
-//选择分页样式：
+//选择分页样式： 可选用样式：flickr、blackRed、youtube、viciao
 $pageClass->pageType = 'flickr';
 //分页位置，如：左、中、右；可不设置，使用默认位置
 $pageClass->pageAlign = 'center';
@@ -38,34 +41,35 @@ $totle = 100;
 //第2个参数是每页显示多少条数据，第3个参数是显示多少个分页按钮，第4个参数是显示...和最后一个页码
 $pageHtml = $pageClass->getPageHtml($totle, 10, 7, true);
 ```
-  
 ```
-例子2 $pageClass->getPageHtml 比例子一多了第5个参数
+例子2 ajax 模式：
+include "../vendor/autoload.php";
+use lipowei\smallTools\Page;
 $pageClass = new Page();
-$pageClass->pageType = 'flickr';
-//第5个参数是显示 1-10/100 记录 的信息
-$pageHtml = $pageClass->getPageHtml($totle, 10, 7, true, true);
-```
-  
-```
-例子3 样式选用了 blackRed  ；可选用样式：flickr、blackRed、youtube、viciao
-$pageClass = new Page();
-$pageClass->pageType = 'blackRed';
-$pageHtml = $pageClass->getPageHtml($totle, 10, 7, false);
-```
-  
-## 参数介绍
-* new Page($param1,$param2);
-```
-$param1 是否开启自动补全路由信息，仅在 pathInfo 模式下有效，默认为3，即自动补全路由参数，
-不足3个的在后面自动追加index，如：/admin/index 跳转页码时会自动变成 /admin/index/index/page/X
-如果不需要自动补全传入false；
+//开启 ajax 模式
+$pageClass->isAajx = true;
+```  
 
-$param2 如果是 swoole 启动的服务，需要传入 $request->server['request_uri'] ，不是swoole直接忽略
+## 参数介绍
+* $pageClass->autoAddUrlInfo
+```
+默认为3
+是否开启自动补全路由信息，仅在 pathInfo 模式下有效，即自动补全路由参数
+不足3个的在后面自动追加index，如：/admin/index 跳转页码时会自动变成 /admin/index/index/page/X 会多添加一个/index补全3个路由参数
+如果不需要自动补全传入0；
+```
+* $pageClass->requestUri
+```
+如果是 swoole 启动的服务，需要传入$pageClass->requestUri = $request->server['request_uri'] ，不是swoole直接忽略该参数
+```
+* $pageClass->isAjax
+```
+是否开启ajax模式，默认为false
 ```
 * $pageClass->urlType
 ```
-设置URL的类型，默认是0，是 pathInfo 模式，即 .../page/X
+默认是0
+设置URL的类型，是 pathInfo 模式，即 .../page/X
 设置为1为普通模式，page是$_GET获取，即 ?page=X 或 &page=X
 ```
 * $pageClass->pageType
