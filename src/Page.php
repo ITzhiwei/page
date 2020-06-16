@@ -413,7 +413,6 @@ class Page{
         $pageHtml .= '<div class="'.$type.'" id="lipoweiPageMain" style="user-select:none;">';
         if($isAjax){
             $pageHtml .= $this->ajaxScript();
-            var_dump($this->ajaxScript());
         }
         return $pageHtml;
 
