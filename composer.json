@@ -1,6 +1,6 @@
 {
     "name": "lipowei/page",
-    "description": "分页；简单+灵活，支持ajax模式和普通跳转模式",
+    "description": "PHP 分页 ，支持ajax模式和普通跳转模式",
     "type": "library",
     "license": "MIT",
     "version": "v2.0",
