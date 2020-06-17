@@ -1,6 +1,6 @@
 {
     "name": "lipowei/page",
-    "description": "分页；简单+灵活，生成分页html，支持 ajax模式、 [?|&]page=1 等普通GET模式，也支持 pathInfo 模式 /page/1",
+    "description": "分页；简单+灵活，支持ajax模式和普通跳转模式",
     "type": "library",
     "license": "MIT",
     "version": "v2.0",
