@@ -1,14 +1,9 @@
-# PHP分页类库，支持ajax模式和含SEO的模式
+# PHP分页类库，支持ajax模式和普通的跳转模式，内含demo例子
 ## 介绍
-没有任何依赖，可在任何环境下使用，开箱即用，内含demo  
-简单灵活好用，多个样式可选，支持 ajax 模式 和 普通的[?|&]page=1 和 pathInfo /page/1 等模式  
-点击跳转分页时不会漏掉其他url原有的参数  
-下面的图片是效果，如果图片不能显示，则是你的网络DNS不通 raw.githubusercontent.com ，可解析IP:151.101.76.133  
-![add Image](https://github.com/ITzhiwei/page/raw/master/src/demo0.png)  
-![add Image](https://github.com/ITzhiwei/page/raw/master/src/demo6.png)   
-![add Image](https://github.com/ITzhiwei/page/raw/master/src/demo2.png)  
+没有任何依赖，可在任何环境下使用，开箱即用 
+简单灵活好用，多个样式可选，支持 ajax 模式 和 普通的跳转模式，如：[?|&]page=1 和 pathInfo /page/1 等模式  
+点击跳转分页时不会漏掉其他url原有的参数   
 
- 
 ## 安装
 ```
 1、使用 composer 命令安装：composer require lipowei/page
