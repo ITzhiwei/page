@@ -11,13 +11,13 @@
 ![Image](http://oss.wybmxc.com/demo5.png)  
 ## 安装
 ```
-1、使用 composer 命令安装：composer require lipowei/page
+1、使用 composer 命令安装：composer require tcwei/page
 2、直接在 src 找到 Page.php 类库文件，直接拖到你的类目录内，include 该文件可直接使用
 ```
 ## 使用
 ```
 require_once 'vendor/autoload.php'; //这个是composer模式，如果不是composer则无需这行代码
-use lipowei\smallTools\Page;
+use tcwei\smallTools\Page;
 $pageClass = new Page();  
 $totle = 100;//总条数
 $pageHtml = $pageClass->getPageHtml($totle);//这个pageHtml直接输出到html就可以显示分页
@@ -75,12 +75,12 @@ $param2 如果是 swoole 启动的服务，需要传入 $request->server['reques
 分页样式选择，可选样式：flickr、blackRed、youtube、viciao
 也可以自定义样式，如：$pageClass->pageType = 'myStyle';
 前端写样式：
-.lipoweiPageMain .myStyle{}//分页main样式
-.lipoweiPageMain .myStyle a{}//跳转按钮样式
-.lipoweiPageMain .myStyle a:hover{}//鼠标移到按钮时的样式
-.lipoweiPageMain .myStyle span.current{}//当前页码的样式
-.lipoweiPageMain .myStyle a:active{}//点击按钮时的样式
-.lipoweiPageMain .myStyle span.disabled{}//不可点击的按钮样式
+.tcweiPageMain .myStyle{}//分页main样式
+.tcweiPageMain .myStyle a{}//跳转按钮样式
+.tcweiPageMain .myStyle a:hover{}//鼠标移到按钮时的样式
+.tcweiPageMain .myStyle span.current{}//当前页码的样式
+.tcweiPageMain .myStyle a:active{}//点击按钮时的样式
+.tcweiiPageMain .myStyle span.disabled{}//不可点击的按钮样式
 ```
 * $pageClass->pageAlign
 ```

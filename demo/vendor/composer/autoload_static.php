@@ -7,24 +7,26 @@ namespace Composer\Autoload;
 class ComposerStaticInit06c781f48add4ef004e498f625bed50d
 {
     public static $prefixLengthsPsr4 = array (
-        'l' => 
+        't' =>
         array (
-            'lipowei\\smallTools\\' => 19,
+            'tcwei\\smallTools\\' => 19,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'lipowei\\smallTools\\' => 
+        'tcwei\\smallTools\\' =>
         array (
-            0 => __DIR__ . '/..' . '/lipowei/page/src',
+            0 => __DIR__ . '/..' . '/tcwei/page/src',
         ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+
             $loader->prefixLengthsPsr4 = ComposerStaticInit06c781f48add4ef004e498f625bed50d::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit06c781f48add4ef004e498f625bed50d::$prefixDirsPsr4;
+
 
         }, null, ClassLoader::class);
     }

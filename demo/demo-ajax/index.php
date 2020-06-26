@@ -1,6 +1,6 @@
 <?php
     include "../vendor/autoload.php";
-    use lipowei\smallTools\Page;
+    use tcwei\smallTools\Page;
     $pageClass = new Page();
     //开启 ajax 模式
     $pageClass->isAajx = true;

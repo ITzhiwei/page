@@ -4,7 +4,6 @@
 
 $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
-
 return array(
-    'lipowei\\smallTools\\' => array($vendorDir . '/lipowei/page/src'),
+    'tcwei\\smallTools\\' => array($vendorDir . '/tcwei/page/src'),
 );

@@ -1,12 +1,12 @@
 {
-    "name": "lipowei/page",
+    "name": "tcwei/page",
     "description": "PHP 分页 ，支持ajax模式和普通跳转模式，内置4种分页样式，也可前端自定义样式。通过参数可控制其中的部件是否显示。",
     "type": "library",
     "license": "MIT",
-    "version": "v2.0",
+    "version": "v3.0",
     "autoload": {
       "psr-4": {
-        "lipowei\\smallTools\\": "src/"
+        "tcwei\\smallTools\\": "src/"
       }
     },
     "authors": [

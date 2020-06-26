@@ -2,7 +2,7 @@
 
 
     include "../vendor/autoload.php";
-    use lipowei\smallTools\Page;
+    use tcwei\smallTools\Page;
 
     $pageClass = new Page();
     //使用 pathInfo 模式： www.xxx.com/index/index/index/page/X

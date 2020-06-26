@@ -2,9 +2,9 @@
 // +----------------------------------------------------------------------
 // | https://github.com/ITzhiwei
 // +----------------------------------------------------------------------
-// | Author: lipowei <2394599321@qq.com>
+// | Author: tcwei <2394599321@qq.com>
 // +----------------------------------------------------------------------
-namespace lipowei\smallTools;
+namespace tcwei\smallTools;
 class Page{
     /**
      * @var url的模式，0：pathInfo模式，如：page/2    1：普通模式，如：page=2  默认pathInfo模式
@@ -46,7 +46,7 @@ class Page{
     /**
      * @var string，当使用ajax模式时，
      */
-    public $ajaxFunctionName = 'lipoweiPageAjaxFuc';
+    public $ajaxFunctionName = 'tcweiPageAjaxFuc';
 
     private $url = null;
     private $totle = null;
@@ -219,7 +219,7 @@ class Page{
             //判断是否显示下拉列表
             if($showSelect){
                 if($isAjax){
-                    $pageHtml .= '<span class="weiSelect">跳至 <select name="topage" onchange="lipoweiPageAjaxStart(this.value)" >\n';
+                    $pageHtml .= '<span class="weiSelect">跳至 <select name="topage" onchange="tcweiPageAjaxStart(this.value)" >\n';
                 }else{
                     $pageHtml .= '<span class="weiSelect">跳至 <select name="topage" onchange="window.location=\''.$url.'\' + this.value" >\n';
                 }
@@ -410,7 +410,7 @@ class Page{
                         ';
                 break;
         }
-        $pageHtml .= '<div class="'.$type.'" id="lipoweiPageMain" style="user-select:none;">';
+        $pageHtml .= '<div class="'.$type.'" id="tcweiPageMain" style="user-select:none;">';
         if($isAjax){
             $pageHtml .= $this->ajaxScript();
         }
@@ -425,7 +425,7 @@ class Page{
      * @return string
      */
     private function ajaxAhtml($pageNum, $font){
-        return "<a onclick='lipoweiPageAjaxStart($pageNum)'>$font</a>";
+        return "<a onclick='tcweiPageAjaxStart($pageNum)'>$font</a>";
     }
 
     /**
@@ -447,14 +447,14 @@ class Page{
             <script>
                 var pageNum = 0;
                 var pageAjaxLock = true;
-                function lipoweiPageAjaxStart(pageParam){
+                function tcweiPageAjaxStart(pageParam){
                     if(pageAjaxLock){
                         pageAjaxLock = false;
                         pageNum = pageParam;
                         if(typeof '.$ajaxFcuntionName2.' != \'undefined\'){
                         ' . $ajaxFcuntionName . ';
                         var pageHtml = compositePageHtml(pageNum);
-                        document.getElementById(\'lipoweiPageMain\').innerHTML = pageHtml;
+                        document.getElementById(\'tcweiPageMain\').innerHTML = pageHtml;
                         }else{
                             alert(\''.$ajaxFcuntionName2.'不存在，请定义 '.$ajaxFcuntionName2.' 函数，它的作用是进行 ajax 请求获取后端数据；\\r\\n注意：\\r\\n1)全局 pageNum 参数是页码，需要传给后端;\\r\\n2)需要在 ajax 回调中写 pageAjaxLock = true;\')
                         }
@@ -464,7 +464,7 @@ class Page{
                 }
                 
                 function compositePageHtml(pageParam){
-                    var lipoweiPageHtml = "";
+                    var tcweiPageHtml = "";
                     var prevPage = pageParam - 1;
                     var nextPage = pageParam + 1;
                     var allPageNum = '.$this->allPageNum.';
@@ -487,20 +487,20 @@ class Page{
                         }else{ 
                             endDisplayNum = limitPageStart + onePageDisplayNum;
                         }
-                        lipoweiPageHtml += \'<span class="disabled">\' + limitPageStart + \'-\' + endDisplayNum + \'/\' + totle + \'记录</span>\';
+                        tcweiPageHtml += \'<span class="disabled">\' + limitPageStart + \'-\' + endDisplayNum + \'/\' + totle + \'记录</span>\';
                     };
                     if(showHome){
                         if(pageParam > 1){
-                            lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart(1)\'>首页</a>";
+                            tcweiPageHtml += "<a onclick=\'tcweiPageAjaxStart(1)\'>首页</a>";
                         }else{
-                            lipoweiPageHtml += "<span class=\'disabled\'>首页</span>";
+                            tcweiPageHtml += "<span class=\'disabled\'>首页</span>";
                         }
                     };
                     if(showPrevNext){
                         if(pageParam > 1){
-                            lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+prevPage+")\'>上一页</a>";
+                            tcweiPageHtml += "<a onclick=\'tcweiPageAjaxStart("+prevPage+")\'>上一页</a>";
                         }else{
-                            lipoweiPageHtml += "<span class=\'disabled\'>上一页</span>";
+                            tcweiPageHtml += "<span class=\'disabled\'>上一页</span>";
                         }
                     };
                     if(showNumList){
@@ -513,9 +513,9 @@ class Page{
                         var forStartPage = startPage;
                         for(var i=0;i<showNumList;i++){
                             if(forStartPage == pageParam){
-                                lipoweiPageHtml += "<span class=\'current\'>"+ forStartPage +"</span>";
+                                tcweiPageHtml += "<span class=\'current\'>"+ forStartPage +"</span>";
                             }else{
-                                lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+forStartPage+")\'>"+forStartPage+"</a>";
+                                tcweiPageHtml += "<a onclick=\'tcweiPageAjaxStart("+forStartPage+")\'>"+forStartPage+"</a>";
                             }
                             forStartPage++;
                             //若已经没有更多页数，直接退出拼接
@@ -527,9 +527,9 @@ class Page{
                             forStartPage--;
                             if (forStartPage < allPageNum) {
                                 if (forStartPage + 1 < allPageNum) {
-                                    lipoweiPageHtml += "..." + "<a onclick=\'lipoweiPageAjaxStart("+allPageNum+")\'>"+allPageNum+"</a>";
+                                    tcweiPageHtml += "..." + "<a onclick=\'tcweiPageAjaxStart("+allPageNum+")\'>"+allPageNum+"</a>";
                                 }else{
-                                    lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+allPageNum+")\'>"+allPageNum+"</a>";
+                                    tcweiPageHtml += "<a onclick=\'tcweiPageAjaxStart("+allPageNum+")\'>"+allPageNum+"</a>";
                                 }
                             }
                         }
@@ -537,34 +537,34 @@ class Page{
                     
                     if(showPrevNext) {
                          if (nextPage <= allPageNum) {
-                             lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+nextPage+")\'>下一页</a>";
+                             tcweiPageHtml += "<a onclick=\'tcweiPageAjaxStart("+nextPage+")\'>下一页</a>";
                          }else{
-                             lipoweiPageHtml += "<span class=\'disabled\'>下一页</span>";
+                             tcweiPageHtml += "<span class=\'disabled\'>下一页</span>";
                          }
                     };
                     
                     if(showHome){
                         if (nextPage <= allPageNum) {
-                            lipoweiPageHtml += "<a onclick=\'lipoweiPageAjaxStart("+allPageNum+")\'>尾页</a>";
+                            tcweiPageHtml += "<a onclick=\'tcweiPageAjaxStart("+allPageNum+")\'>尾页</a>";
                         }else{
-                            lipoweiPageHtml += "<span class=\'disabled\'>尾页</span>";
+                            tcweiPageHtml += "<span class=\'disabled\'>尾页</span>";
                         }
                     };
                     
                     if(showSelect){
-                        lipoweiPageHtml += "<span class=\'weiSelect\'>跳至 <select name=\'topage\' onchange=\'lipoweiPageAjaxStart("+this.value+")\' >";
+                        tcweiPageHtml += "<span class=\'weiSelect\'>跳至 <select name=\'topage\' onchange=\'tcweiPageAjaxStart("+this.value+")\' >";
                         for(var i=1; i<=allPageNum; i++){
                             if(i == pageParam){
-                                lipoweiPageHtml += "<option value=\'"+i+"\' selected>"+i+"</option>";
+                                tcweiPageHtml += "<option value=\'"+i+"\' selected>"+i+"</option>";
                             }else{
-                                lipoweiPageHtml += "<option value=\'"+i+"\'>"+i+"</option>";
+                                tcweiPageHtml += "<option value=\'"+i+"\'>"+i+"</option>";
                             }
                         }
-                        lipoweiPageHtml += "</select> 页</span>";
+                        tcweiPageHtml += "</select> 页</span>";
                     }
                     
-                    lipoweiPageHtml += "</div>";
-                    return lipoweiPageHtml;
+                    tcweiPageHtml += "</div>";
+                    return tcweiPageHtml;
                 }
             </script>';
         return $js;

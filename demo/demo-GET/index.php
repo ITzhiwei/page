@@ -2,7 +2,8 @@
 
 
     include "../vendor/autoload.php";
-    use lipowei\smallTools\Page;
+    use tcwei\smallTools\Page;
+
     $pageClass = new Page();
     //urlTtpe = 1 即是选择GET模式
     $pageClass->urlType = 1;
