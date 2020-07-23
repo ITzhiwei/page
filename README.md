@@ -6,8 +6,8 @@
 
 ## 安装
 ```
-1、使用 composer 命令安装：composer require tcwei/page
-2、直接在 src 找到 Page.php 类库文件，直接拖到你的类目录内，include 该文件可直接使用
+方式1：使用 composer 命令安装：composer require tcwei/page
+方式2：也可直接在 src 找到 Page.php 类库文件，直接拖到你的类目录内，include 该文件可直接使用
 ```
 ## 使用
 ```
