@@ -31,6 +31,10 @@ class Page{
      */
     public $pageAlign = null;
     /**
+     * @var string，仅存在一页时的字体颜色
+     */
+    public $noPageFontColor = '#ccc';
+    /**
      * @var PATHINFO模式下是否自动补全路由参数，默认补全；如：www.xxx.com/admin 会自动补全成 www.xxx.com/admin/index/index  不足3个路由参数的后面自动补全3个路由参数，如果要识别补全的数量不是3，传入其他数字即可
      */
     public $autoAddUrlInfo = 3;
@@ -70,7 +74,7 @@ class Page{
      * @param bool $showHome 是否显示 首页、尾页 俩个按钮，默认显示
      * @param bool $showSelect 是否显示下拉选择页码，默认不显示
      * @param string $url 自定义跳转URL，如： /users.php?page=     /users/page/   方法会在自定义的URL后面追加页码数，所以不要在后面带上page参数
-     * @return string 若只有一页，则返回空字符串
+     * @return string HtmlString
      */
     public function getPageHtml($totle, $onePageDisplayNum = 10, $showNumList = 7, $showNumListType = true, $showText = false, $showPrevNext = true , $showHome = true, $showSelect = false, $url = null){
 
@@ -237,7 +241,7 @@ class Page{
             return $pageHtml;
 
         }else{
-            return '';
+            return $this->onePage($totle);
         }
     }
 
@@ -336,7 +340,7 @@ class Page{
 
     /**
      * 样式选择器
-     * @param $type
+     * @param string $type
      * @return string
      */
     private function styleSelect($type){
@@ -409,6 +413,15 @@ class Page{
                         </style>
                         ';
                 break;
+            case 'onePage':
+                $fontColor = $this->noPageFontColor;
+                $pageHtml = '
+                        <style>
+                            #tcweiPageMain .scott{text-align: center;color:'.$fontColor.';PADDING:3PX;}
+                            #tcweiPageMain .disabled{PADDING:2PX 5PX;COLOR: '.$fontColor.';MARGIN-RIGHT: 2px;}
+                        </style>
+                        ';
+                break;
         }
         $pageHtml .= '<div class="'.$type.'" id="tcweiPageMain" style="user-select:none;">';
         if($isAjax){
@@ -416,6 +429,17 @@ class Page{
         }
         return $pageHtml;
 
+    }
+
+    /**
+     * 仅存在一页数据
+     * @param int $allPageNum
+     * @return string htmlString
+     */
+    public function onePage($totle){
+        $pageHtml = $this->styleSelect('onePage');
+        $startNum = $totle?1:0;
+        return $pageHtml.'<div class="scott"><span class="disabled">'.$startNum.'-'.$totle.'/'.$totle.' 记录</span><span class="disabled">共 '.$startNum.' 页</span></div>';
     }
 
     /**
@@ -571,5 +595,6 @@ class Page{
     }
 
 }
+
 ?>
 
